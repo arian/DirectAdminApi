@@ -17,7 +17,8 @@ for:
 It would be great to add more features to create a simple to use PHP 
 implementation of the Direct Admin API
 
-==== How to use ====
+How to use
+=========
 
 See demo/example.php for more examples.
 You can browse the source code as well and try things out for the right
