@@ -1,4 +1,5 @@
-==== PHP Direct Admin API ====
+PHP Direct Admin API
+====================
 
 This is a set of classes to communicate with Direct Admin (DA)
 via the Direct Admin API to configurate some things in 
