@@ -4,33 +4,37 @@
  * http://www.directadmin.com/api.html#email
  */
 
-include_once 'DA_API.php';
+include_once 'Api.php';
 
 class DA_Emails extends DA_API {
-		
+
 	/**
-	 * 
+	 *
 	 * @param string $domain
 	 * @return array
 	 */
 	public function fetch($domain=null){
 		$domain = $this->getDomain($domain);
-		
+
 		$this->sock->query('/CMD_API_POP',array(
 			'action' => 'list',
 			'domain' => $domain
 		));
 		$row = $this->sock->fetch_parsed_body();
-		
-		if(isset($row['list']) && is_array($row['list'])){
-			return $row['list'];
-		}elseif(isset($row['error']) && isset($row['text'])){
-			include_once 'DA_Exception.php';
-			throw new DA_Exception($row['text'].' - '.$row['details']);
+
+		if(is_array($row)){
+			foreach($row as &$item){
+				parse_str($item,$item);
+			}
+			if(empty($item) || !is_array($item) || !isset($item['quota'])){
+				$row = array();
+			}
+		}else{
+			$row = array();
 		}
 		return array();
 	}
-	
+
 	/**
 	 * Get a list of the users and the quota and usage
 	 * @param string $domain
@@ -38,7 +42,7 @@ class DA_Emails extends DA_API {
 	 */
 	public function fetchQuotas($domain=null){
 		$domain = $this->getDomain($domain);
-		
+
 		$this->sock->query('/CMD_API_POP',array(
 			'action'	=> 'list',
 			'type'		=> 'quota',
@@ -53,17 +57,17 @@ class DA_Emails extends DA_API {
 
 		foreach($row as &$item){
 			parse_str($item,$item);
-		}		
+		}
 		return $row;
 	}
-	
+
 	/**
 	 * Get the quota and usage for a user
 	 * @param string $user
 	 * @param string $domain
 	 * @return array for example array(usage=>3412,quota=>123543)
 	 */
-	public function fetchUserQuota($user,$domain=null){		
+	public function fetchUserQuota($user,$domain=null){
 		$quotas = $this->fetchQuotas($domain);
 		return isset($quotas[$user]) ? $quotas[$user] : array();
 	}
@@ -78,7 +82,7 @@ class DA_Emails extends DA_API {
 	 */
 	public function create($user,$pass,$quota=0,$domain=null){
 		$domain = $this->getDomain($domain);
-		
+
 		$this->sock->query('/CMD_API_POP',array(
 			'action' 	=> 'create',
 			'domain' 	=> $domain,
@@ -86,11 +90,11 @@ class DA_Emails extends DA_API {
 			'user'		=> $user,
 			'passwd'	=> $pass
 		));
-		
+
 		$ret = $this->sock->fetch_parsed_body();
 		return isset($ret['error']) && $ret['error'] == 0;
 	}
-	
+
 	/**
 	 * Set the password of an emailaddress
 	 * @param string $user
@@ -100,7 +104,7 @@ class DA_Emails extends DA_API {
 	 */
 	public function modify($user,$pass=null,$quota=0,$domain=null){
 		$domain = $this->getDomain($domain);
-		
+
 		$this->sock->query('/CMD_API_POP',array(
 			'action'	=> 'modify',
 			'domain' 	=> $domain,
@@ -109,11 +113,11 @@ class DA_Emails extends DA_API {
 			'passwd2'	=> $pass,
 			'quota'		=> $quota
 		));
-		
+
 		$ret = $this->sock->fetch_parsed_body();
 		return isset($ret['error']) && $ret['error'] == 0;
 	}
-	
+
 	/**
 	 * Delete an user
 	 * @param string $user
@@ -122,15 +126,15 @@ class DA_Emails extends DA_API {
 	 */
 	public function delete($user,$domain=null){
 		$domain = $this->getDomain($domain);
-		
+
 		$this->sock->query('/CMD_API_POP',array(
 			'action'	=> 'delete',
 			'domain' 	=> $domain,
 			'user'		=> $user
 		));
-		
+
 		$ret = $this->sock->fetch_parsed_body();
 		return isset($ret['error']) && $ret['error'] == 0;
 	}
-	
+
 }
