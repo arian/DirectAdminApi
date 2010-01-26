@@ -3,32 +3,32 @@
 include_once 'HTTPSocket.php';
 
 abstract class DA_API {
-	
+
 	/**
 	 * @var HTTPSocket
 	 */
 	protected $sock;
-	
+
 	/**
 	 * The default domain
 	 * @var string
 	 */
 	protected $domain;
-	
+
 	/**
-	 * 
+	 *
 	 * @param HTTPSocket $sock
-	 * @return 
+	 * @return
 	 */
 	public function __construct(HTTPSocket $sock,$domain=null){
 		$this->sock = $sock;
 		$this->domain = $domain;
 	}
-	
+
 	public function setDomain($domain){
 		$this->domain = $domain;
 	}
-	
+
 	public function getDomain($domain=null){
 		$domain = $domain ? $domain : $this->domain;
 		if(empty($domain)){
@@ -37,6 +37,5 @@ abstract class DA_API {
 		}
 		return $domain;
 	}
-	
-	
+
 }

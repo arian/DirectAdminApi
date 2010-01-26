@@ -49,15 +49,17 @@ class DA_Emails extends DA_API {
 			'domain'	=> $domain
 		));
 		$row = $this->sock->fetch_parsed_body();
-
-		if(isset($row['error']) && isset($row['text'])){
-			include_once 'DA_Exception.php';
-			throw new DA_Exception($row['text'].' - '.$row['details']);
+		if(is_array($row)){
+			foreach($row as &$item){
+				parse_str($item,$item);
+			}
+			if(empty($item) || !is_array($item) || !isset($item['quota'])){
+				$row = array();
+			}
+		}else{
+			$row = array();
 		}
 
-		foreach($row as &$item){
-			parse_str($item,$item);
-		}
 		return $row;
 	}
 
