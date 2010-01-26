@@ -32,7 +32,7 @@ abstract class DA_API {
 	public function getDomain($domain=null){
 		$domain = $domain ? $domain : $this->domain;
 		if(empty($domain)){
-			include_once 'DA_Exception.php';
+			include_once 'Exception.php';
 			throw new DA_Exception('No Domain is set!');
 		}
 		return $domain;
