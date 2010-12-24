@@ -4,32 +4,30 @@
  * http://www.directadmin.com/api.html#email
  */
 
-include_once 'Api.php';
+include_once dirname(__FILE__) . '/Api.php';
 
-class DA_Emails extends DA_API {
+class DA_Emails extends DA_Api {
 
 	/**
 	 *
 	 * @param string $domain
 	 * @return array
 	 */
-	public function fetch($domain=null){
+	public function fetch($domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_POP',array(
+		$this->sock->query('/CMD_API_POP', array(
 			'action' => 'list',
 			'domain' => $domain
 		));
 		$row = $this->sock->fetch_parsed_body();
 
-		if(is_array($row)){
-			foreach($row as &$item){
-				parse_str($item,$item);
-			}
-			if(empty($item) || !is_array($item) || !isset($item['quota'])){
+		if (is_array($row)){
+			foreach ($row as &$item) parse_str($item, $item);
+			if (empty($item) || !is_array($item) || !isset($item['quota'])){
 				$row = array();
 			}
-		}else{
+		} else {
 			$row = array();
 		}
 		return array();
@@ -40,23 +38,21 @@ class DA_Emails extends DA_API {
 	 * @param string $domain
 	 * @return array for example array('user' => array(usage=>3412,quota=>123543))
 	 */
-	public function fetchQuotas($domain=null){
+	public function fetchQuotas($domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_POP',array(
+		$this->sock->query('/CMD_API_POP', array(
 			'action'	=> 'list',
 			'type'		=> 'quota',
 			'domain'	=> $domain
 		));
 		$row = $this->sock->fetch_parsed_body();
-		if(is_array($row)){
-			foreach($row as &$item){
-				parse_str($item,$item);
-			}
-			if(empty($item) || !is_array($item) || !isset($item['quota'])){
+		if (is_array($row)){
+			foreach ($row as &$item) parse_str($item, $item);
+			if (empty($item) || !is_array($item) || !isset($item['quota'])){
 				$row = array();
 			}
-		}else{
+		} else {
 			$row = array();
 		}
 
@@ -69,9 +65,9 @@ class DA_Emails extends DA_API {
 	 * @param string $domain
 	 * @return array for example array(usage=>3412,quota=>123543)
 	 */
-	public function fetchUserQuota($user,$domain=null){
+	public function fetchUserQuota($user, $domain = null){
 		$quotas = $this->fetchQuotas($domain);
-		return isset($quotas[$user]) ? $quotas[$user] : array();
+		return (isset($quotas[$user]) ? $quotas[$user] : array());
 	}
 
 	/**
@@ -82,10 +78,10 @@ class DA_Emails extends DA_API {
 	 * @param string $domain
 	 * @return bool
 	 */
-	public function create($user,$pass,$quota=0,$domain=null){
+	public function create($user, $pass, $quota = 0, $domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_POP',array(
+		$this->sock->query('/CMD_API_POP', array(
 			'action' 	=> 'create',
 			'domain' 	=> $domain,
 			'quota'		=> $quota,
@@ -94,7 +90,7 @@ class DA_Emails extends DA_API {
 		));
 
 		$ret = $this->sock->fetch_parsed_body();
-		return isset($ret['error']) && $ret['error'] == 0;
+		return (isset($ret['error']) && $ret['error'] == 0);
 	}
 
 	/**
@@ -104,10 +100,10 @@ class DA_Emails extends DA_API {
 	 * @param string $domain
 	 * @return bool
 	 */
-	public function modify($user,$pass=null,$quota=0,$domain=null){
+	public function modify($user, $pass = null, $quota = 0, $domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_POP',array(
+		$this->sock->query('/CMD_API_POP', array(
 			'action'	=> 'modify',
 			'domain' 	=> $domain,
 			'user'		=> $user,
@@ -117,7 +113,7 @@ class DA_Emails extends DA_API {
 		));
 
 		$ret = $this->sock->fetch_parsed_body();
-		return isset($ret['error']) && $ret['error'] == 0;
+		return (isset($ret['error']) && $ret['error'] == 0);
 	}
 
 	/**
@@ -126,7 +122,7 @@ class DA_Emails extends DA_API {
 	 * @param string $domain
 	 * @return bool
 	 */
-	public function delete($user,$domain=null){
+	public function delete($user, $domain = null){
 		$domain = $this->getDomain($domain);
 
 		$this->sock->query('/CMD_API_POP',array(
@@ -136,7 +132,7 @@ class DA_Emails extends DA_API {
 		));
 
 		$ret = $this->sock->fetch_parsed_body();
-		return isset($ret['error']) && $ret['error'] == 0;
+		return (isset($ret['error']) && $ret['error'] == 0);
 	}
 
 }

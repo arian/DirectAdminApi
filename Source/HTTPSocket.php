@@ -16,7 +16,7 @@
 class HTTPSocket {
 
     var $version = '2.6';
-   
+
     /* all vars are private except $error, $query_cache, and $doFollowLocationHeader */
 
     var $method = 'GET';
@@ -117,7 +117,7 @@ class HTTPSocket {
             $location = parse_url($request);
             $this->connect($location['host'],$location['port']);
             $this->set_login($location['user'],$location['pass']);
-           
+
             $request = $location['path'];
             $content = $location['query'];
 
@@ -270,7 +270,7 @@ class HTTPSocket {
             }
 
         }
-       
+
         list($this->result_header,$this->result_body) = split("\r\n\r\n",$this->result,2);
 
         if ($this->bind_host)
@@ -309,7 +309,7 @@ class HTTPSocket {
                 $this->query($headers['location']);
             }
         }
-       
+
     }
 
     function getTransferSpeed()
@@ -393,7 +393,7 @@ class HTTPSocket {
     function fetch_header( $header = '' )
     {
         $array_headers = split("\r\n",$this->result_header);
-       
+
         $array_return = array( 0 => $array_headers[0] );
         unset($array_headers[0]);
 

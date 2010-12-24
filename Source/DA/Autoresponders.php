@@ -5,24 +5,24 @@
  * http://www.directadmin.com/features.php?id=348
  */
 
-include_once 'Api.php';
+include_once dirname(__FILE__) . '/Api.php';
 
-class DA_Autoresponders extends DA_API {
+class DA_Autoresponders extends DA_Api {
 
 	/**
 	 * Fetch all the Autoresponders
 	 * @param string $domain
 	 * @return array array(array('user' => 'destination email'))
 	 */
-	public function fetch($domain=null){
+	public function fetch($domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_EMAIL_AUTORESPONDER',array(
+		$this->sock->query('/CMD_API_EMAIL_AUTORESPONDER', array(
 			'domain' => $domain
 		));
 		$rows = $this->sock->fetch_parsed_body();
 		$keys = array_keys($rows);
-		if(isset($keys[1]) && $keys[1] == '#95API'){
+		if (isset($keys[1]) && $keys[1] == '#95API'){
 			$rows = array();
 		}
 		return $rows;
@@ -34,10 +34,10 @@ class DA_Autoresponders extends DA_API {
 	 * @param string $domain
 	 * @return string
 	 */
-	public function fetchUser($user,$domain=null){
+	public function fetchUser($user, $domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_EMAIL_AUTORESPONDER_MODIFY',array(
+		$this->sock->query('/CMD_API_EMAIL_AUTORESPONDER_MODIFY', array(
 			'domain'	=> $domain,
 			'user'		=> $user
 		));
@@ -51,7 +51,7 @@ class DA_Autoresponders extends DA_API {
 	 * @param string $domain
 	 * @return bool
 	 */
-	public function create($user,$msg,$email=null,$domain=null){
+	public function create($user, $msg, $email = null, $domain = null){
 		$domain = $this->getDomain($domain);
 
 		$data = array(
@@ -63,10 +63,10 @@ class DA_Autoresponders extends DA_API {
 			'email'		=> $email,
 			'create'	=> 'Create'
 		);
-		$this->sock->query('/CMD_API_EMAIL_AUTORESPONDER',$data);
+		$this->sock->query('/CMD_API_EMAIL_AUTORESPONDER', $data);
 
 		$ret = $this->sock->fetch_parsed_body();
-		return isset($ret['error']) && $ret['error'] == 0;
+		return (isset($ret['error']) && $ret['error'] == 0);
 	}
 
 	/**
@@ -76,10 +76,10 @@ class DA_Autoresponders extends DA_API {
 	 * @param string $domain
 	 * @return bool
 	 */
-	public function modify($user,$msg,$email,$domain=null){
+	public function modify($user, $msg, $email, $domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_EMAIL_AUTORESPONDER',array(
+		$this->sock->query('/CMD_API_EMAIL_AUTORESPONDER', array(
 			'action'	=> 'modify',
 			'domain' 	=> $domain,
 			'user'		=> $user,
@@ -90,7 +90,7 @@ class DA_Autoresponders extends DA_API {
 		));
 
 		$ret = $this->sock->fetch_parsed_body();
-		return isset($ret['error']) && $ret['error'] == 0;
+		return (isset($ret['error']) && $ret['error'] == 0);
 	}
 
 	/**
@@ -99,10 +99,10 @@ class DA_Autoresponders extends DA_API {
 	 * @param string $domain
 	 * @return bool
 	 */
-	public function delete($user,$domain=null){
+	public function delete($user, $domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_EMAIL_AUTORESPONDER',array(
+		$this->sock->query('/CMD_API_EMAIL_AUTORESPONDER', array(
 			'action'	=> 'delete',
 			'domain' 	=> $domain,
 			'user'		=> $user,
@@ -110,7 +110,7 @@ class DA_Autoresponders extends DA_API {
 		));
 
 		$ret = $this->sock->fetch_parsed_body();
-		return isset($ret['error']) && $ret['error'] == 0;
+		return (isset($ret['error']) && $ret['error'] == 0);
 	}
 
 }

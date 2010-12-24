@@ -4,25 +4,25 @@
  * http://www.directadmin.com/api.html#email
  */
 
-include_once 'Api.php';
+include_once dirname(__FILE__) . '/Api.php';
 
-class DA_Forwarders extends DA_API {
+class DA_Forwarders extends DA_Api {
 
 	/**
 	 * Fetch all the forwarders
 	 * @param string $domain
 	 * @return array array(array('user' => 'destination email'))
 	 */
-	public function fetch($domain=null){
+	public function fetch($domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_EMAIL_FORWARDERS',array(
+		$this->sock->query('/CMD_API_EMAIL_FORWARDERS', array(
 			'action' => 'list',
 			'domain' => $domain
 		));
 		$rows = $this->sock->fetch_parsed_body();
 		$keys = array_keys($rows);
-		if(isset($keys[1]) && $keys[1] == '#95API'){
+		if (isset($keys[1]) && $keys[1] == '#95API'){
 			$rows = array();
 		}
 		return $rows;
@@ -34,7 +34,7 @@ class DA_Forwarders extends DA_API {
 	 * @param string $domain
 	 * @return string
 	 */
-	public function fetchUser($user,$domain=null){
+	public function fetchUser($user, $domain = null){
 		$users = $this->fetch($domain);
 		return isset($users[$user]) ? $users[$user] : null;
 	}
@@ -46,10 +46,10 @@ class DA_Forwarders extends DA_API {
 	 * @param string $domain
 	 * @return bool
 	 */
-	public function create($user,$email,$domain=null){
+	public function create($user, $email, $domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_EMAIL_FORWARDERS',array(
+		$this->sock->query('/CMD_API_EMAIL_FORWARDERS', array(
 			'action' 	=> 'create',
 			'domain' 	=> $domain,
 			'user'		=> $user,
@@ -67,10 +67,10 @@ class DA_Forwarders extends DA_API {
 	 * @param string $domain
 	 * @return bool
 	 */
-	public function modify($user,$email,$domain=null){
+	public function modify($user,  $email, $domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_EMAIL_FORWARDERS',array(
+		$this->sock->query('/CMD_API_EMAIL_FORWARDERS', array(
 			'action'	=> 'modify',
 			'domain' 	=> $domain,
 			'user'		=> $user,
@@ -87,10 +87,10 @@ class DA_Forwarders extends DA_API {
 	 * @param string $domain
 	 * @return bool
 	 */
-	public function delete($user,$domain=null){
+	public function delete($user, $domain = null){
 		$domain = $this->getDomain($domain);
 
-		$this->sock->query('/CMD_API_EMAIL_FORWARDERS',array(
+		$this->sock->query('/CMD_API_EMAIL_FORWARDERS', array(
 			'action'	=> 'delete',
 			'domain' 	=> $domain,
 			'user'		=> $user,
