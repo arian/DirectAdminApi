@@ -303,7 +303,7 @@ class HTTPSocket {
 		// now, if we're being passed a location header, should we follow it?
 		if ($this->doFollowLocationHeader)
 		{
-			if ($headers['location'])
+			if (!empty($headers['location']))
 			{
 				$this->redirectURL = $headers['location'];
 				$this->query($headers['location']);
