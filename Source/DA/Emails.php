@@ -22,13 +22,8 @@ class DA_Emails extends DA_Api {
 		));
 		$row = $this->sock->fetch_parsed_body();
 
-		if (is_array($row)){
-			foreach ($row as &$item) parse_str($item, $item);
-			if (empty($item) || !is_array($item) || !isset($item['quota'])){
-				$row = array();
-			}
-		} else {
-			$row = array();
+		if (!empty($row['list']) && is_array($row['list'])){
+			return $row['list'];
 		}
 		return array();
 	}
