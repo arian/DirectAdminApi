@@ -58,7 +58,7 @@ class DA_Emails extends DA_Api {
 	 * Get the quota and usage for a user
 	 * @param string $user
 	 * @param string $domain
-	 * @return array for example array(usage=>3412,quota=>123543)
+	 * @return array for example array(usage=>3412,quota=>123543), both are in bytes
 	 */
 	public function fetchUserQuota($user, $domain = null){
 		$quotas = $this->fetchQuotas($domain);
@@ -69,9 +69,9 @@ class DA_Emails extends DA_Api {
 	 * Create an Email Address
 	 * @param string $user
 	 * @param string $pass
-	 * @param int $quota [optional] Integer in Megabytes. Zero for unlimited, 1+ for number of Megabytes.
+	 * @param int $quota [optional] Integer in Megabytes. Zero for unlimited, > 0 for number of Megabytes.
 	 * @param string $domain
-	 * @return bool
+	 * @return bool returns true if the email address was created succesfully
 	 */
 	public function create($user, $pass, $quota = 0, $domain = null){
 		$domain = $this->getDomain($domain);
@@ -93,7 +93,7 @@ class DA_Emails extends DA_Api {
 	 * @param string $user
 	 * @param string $pass
 	 * @param string $domain
-	 * @return bool
+	 * @return bool returns true if the email address was created succesfully
 	 */
 	public function modify($user, $pass = null, $quota = 0, $domain = null){
 		$domain = $this->getDomain($domain);
